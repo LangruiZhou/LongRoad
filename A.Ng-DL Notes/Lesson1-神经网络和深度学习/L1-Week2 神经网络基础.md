@@ -26,9 +26,7 @@
 
 4、 $m_{train}$：训练集的样本数量。 $m_{test}$：测试集的样本数量
 
-5、样本矩阵：一般使用列向量来存储样本会比较方便。此时，样本集矩阵X的行数为样本向量的维度 $n_x$，列数为样本集中的样本数量 m。
-
-    若想通过python得知样本矩阵X的规模，则可调用命令：`X.shape`，其返回结果为$(n_x,m)$
+5、样本矩阵：一般使用列向量来存储样本会比较方便。此时，样本集矩阵X的行数为样本向量的维度 $n_x$，列数为样本集中的样本数量 m。若想通过python得知样本矩阵X的规模，则可调用命令：`X.shape`，其返回结果为$(n_x,m)$
 
 <div align="center"><img src="../../TyporaPics/3-16506374979913.png" alt="3" style="zoom:67%;" /></div>
 
@@ -36,11 +34,11 @@
 
 ### 1、Logistic Regression概述
 
-Logistic Regression被用于解决“二分类问题”。以猫图问题为例：给定一个$n$维向量 $x\in R^{n_x}$（它代表一张图片），我们希望得知这张图片是一张“猫图”的概率，即求 $\hat{y}=P(y=1|x)\in [0,1]$ 。这就是Logistic Regression的任务。
+Logistic Regression被用于解决“二分类问题”。以*猫图问题*为例：给定一个$n$维向量 $x\in R^{n_x}$（它代表一张图片），我们希望得知这张图片是一张“猫图”的概率，即求 $\hat{y}=P(y=1|x)\in [0,1]$ 。这就是Logistic Regression的任务。
 
-### 2、逻辑回归的假设函数（Hypothesis Function）
+### 2、逻辑回归的假设函数 $\hat{y}$
 
-Logistic Regression的Hypothesis Function一般由线性函数与Sigmoid函数复合而成：
+逻辑回归的假设函数（Hypothesis Function）一般由线性函数与Sigmoid函数复合而成：
 
 - **线性函数：$z=\omega^Tx+b$**
 
@@ -54,4 +52,26 @@ Logistic Regression的Hypothesis Function一般由线性函数与Sigmoid函数�
 <div align="center"><img src="../../TyporaPics/4.png" alt="4" style="zoom: 50%;" /></div>
 
 **综上所述**：$\hat{y}=\sigma(\omega^T x+b)$，而Logistic Regression的任务就是不断地学习参数 $\omega$ 和 $b$ ，以提高 $\hat{y}$ 的准确率。
+
+### 3、逻辑回归的损失函数 $L(\hat{y},y)$
+
+损失函数（Loss Function）用于衡量算法在<font color="red">单个</font>训练样本中的表现，是在<font color="red">单个</font>训练样本中定义的。
+
+#### （1）损失函数的选取 & 常用的损失函数 
+
+**选取原则**：无论如何选取损失函数，都一定要保证其凸优化特性，一旦不满足凸优化特性，。
+
+**常用的一种损失函数**通常使用预测值$\hat{y}$与实际值y的【差的平方】，或者【差的平方的一半】，作为Loss，即：
+$$
+L(\hat{y},y)=(\hat{y}-y)^2 或 L(\hat{y},y)=\frac{1}{2}(\hat{y}-y)^2
+$$
+
+
+
+
+
+
+
+
+
 
