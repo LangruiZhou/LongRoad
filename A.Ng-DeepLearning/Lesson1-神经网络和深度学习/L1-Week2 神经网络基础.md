@@ -157,6 +157,52 @@ z = np.dot(w,x) + b	 # 调用numpy中的矩阵乘法函数：dot
 
 二者的差距显而易见。
 
+### 2、向量化的作用：节省时间，提高效率
+
+做个小测验，来对比一下二者所需时间：
+
+```python
+import numpy as np
+import time  # 导入时间库
+
+# 随机生成2个维度为一百万的数组
+a = np.random.rand(1000000)
+b = np.random.rand(1000000)
+
+# 向量化方法，并记录起止时间
+tic = time.time()
+c = np.dot(a,b)   # 向量乘法
+toc = time.time()
+print("Vectorized version:" + str(1000*(toc-tic)) + "ms")  # 向量化方法所消耗时间
+
+# 非向量化方法，并记录起止时间
+c = 0
+tic = time.time() 
+for i in range(1000000):
+    c += a[i]*b[i]
+toc = time.time() 
+print("For loop:" + str(1000*(toc-tic)) + "ms")  # 非向量化方法所消耗时间
+
+
+# 【输出结果】：
+#  Vectorized version:    1.0001659393310547  ms
+#  For loop:            411.9274616241455     ms
+```
+
+可以很明显地看出，仅仅对代码进行简单的向量化操作，就可以使运行效率提升==400倍==（均在我的笔记本电脑中运行）；且这只是在CPU上运行的效果，若将运行环境切换至更适合于向量运算的GPU上，这个差距将会更大！依据这个经验，在编写神经网络程序时，应该<font color="red">避免使用循环语句</font>，并用向量化方法代替。
+
+### 3、numpy的dot()函数
+
+#### （1）向量乘法
+
+使用dot可以求2个n维向量的内积，即 `np.dot(a,b)` $=a^Tb=a_1b_1+a_2b_2+...+a_nb_n$
+
+#### （2）矩阵乘法
+
+使用dot函数可以直接求矩阵乘法，其条件和矩阵乘法的条件相同：在矩阵乘法AB中，A的列数=B的行数。此时，`np.dot(A,B)`即为A和B做矩阵乘法运算所得的新矩阵。
+
+
+
 
 
 
