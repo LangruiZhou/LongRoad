@@ -93,15 +93,27 @@ Z^{[2]}=W^{[2]}A^{[1]}+b^{[2]}\\
 A^{[2]}=\sigma(Z^{[2]})
 $$
 
-## 四、激活函数
+## 四、激活函数（Activation Functions）
 
 ### 1、sigmoid函数
 
+几乎只有分类模型的输出层才会使用sigmoid函数，其余情况往往使用tanh函数取代之。
+
+**函数解析式**：$a=\sigma(z)=\frac{1}{1+e^{-z}}$
+
 <img src="../../TyporaPics/image-20220512221640088.png" alt="image-20220512221640088" style="zoom:50%;" />
 
-### 2、tanh函数
+### 2、tanh函数（通常取代sigmoid使用）
+
+tanh是由sigmoid函数**平移**得到的，且<font color="red">往往优于sigmoid函数</font>，现在被广泛使用（除了分类问题的输出层）。
+
+**函数解析式**：$a=tanh(z)=\frac{e^z-e^{-z}}{e^z+e^{-z}}$
+
+**优点**：所得函数值$\in [-1,1]$，故均值在0附近，有利于**数据中心化**，便于下一层隐藏层学习
 
 <img src="../../TyporaPics/image-20220512221729545.png" alt="image-20220512221729545" style="zoom:50%;" />
+
+> sigmoid和tanh函数的**共同缺陷**：当$z=w^Tx+b$的直很大时，$a=g(z)$的斜率就会很小，从而导致梯度下降效率极低。
 
 ### 3、ReLU函数
 
