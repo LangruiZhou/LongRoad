@@ -93,32 +93,106 @@ Z^{[2]}=W^{[2]}A^{[1]}+b^{[2]}\\
 A^{[2]}=\sigma(Z^{[2]})
 $$
 
-## 四、激活函数（Activation Functions）
+## 四、常用的激活函数（Activation Functions）
 
 ### 1、sigmoid函数
 
-几乎只有分类模型的输出层才会使用sigmoid函数，其余情况往往使用tanh函数取代之。
-
 **函数解析式**：$a=\sigma(z)=\frac{1}{1+e^{-z}}$
 
-<img src="../../TyporaPics/image-20220512221640088.png" alt="image-20220512221640088" style="zoom:50%;" />
+**用途**：只有当预测结果$\in [0,1]$时（如二分类问题），才使用sigmoid函数作为输出层的激 活函数，<font color="red">否则绝对不要用</font>。
 
-### 2、tanh函数（通常取代sigmoid使用）
+<div align="center"><img src="../../TyporaPics/image-20220515003849401.png" alt="image-20220515003849401" style="zoom:50%;" /></div>
 
-tanh是由sigmoid函数**平移**得到的，且<font color="red">往往优于sigmoid函数</font>，现在被广泛使用（除了分类问题的输出层）。
+### 2、tanh函数
+
+tanh是由sigmoid函数**平移**得到的，且往往优于sigmoid函数，故通常用tanh代替sigmoid函数。
 
 **函数解析式**：$a=tanh(z)=\frac{e^z-e^{-z}}{e^z+e^{-z}}$
 
 **优点**：所得函数值$\in [-1,1]$，故均值在0附近，有利于**数据中心化**，便于下一层隐藏层学习
 
-<img src="../../TyporaPics/image-20220512221729545.png" alt="image-20220512221729545" style="zoom:50%;" />
+<div align="center"><img src="../../TyporaPics/image-20220515004011580.png" alt="image-20220515004011580" style="zoom:50%;" /></div>
 
-> sigmoid和tanh函数的**共同缺陷**：当$z=w^Tx+b$的直很大时，$a=g(z)$的斜率就会很小，从而导致梯度下降效率极低。
+---
 
-### 3、ReLU函数
+<font color="red">sigmoid和tanh函数的**共同缺陷**</font>：当$z=w^Tx+b$的直很大时，$a=g(z)$的斜率就会很小，从而导致梯度下降效率极低。因此，现在比较少使用这两个函数作为激活函数，而是更经常地使用ReLU作为激活函数。
 
-<img src="../../TyporaPics/image-20220512221758326.png" alt="image-20220512221758326" style="zoom:50%;" />
+### 3、修正线性单元ReLU（Rectified Linear Unit）——最常用的万金油
 
-### 4、Leaky ReLU函数
+**函数解析式**：$a=relu(z)=max\{0,z\}$
 
-<img src="../../TyporaPics/image-20220512221817354.png" alt="image-20220512221817354" style="zoom:50%;" />
+**z=0的情况**：此时理论上导数无意义，但实现的时候，可以令该点导数为1或0。这样处理并不会影响最终结果。
+
+**用途**：一般情况下都可以使用ReLU作为激活函数，因为它总保持一定的斜率；因此对大多数z而言，ReLU比sigmoid/tanh的效率高很多很多。
+
+<div align="center"><img src="../../TyporaPics/image-20220515004124206.png" alt="image-20220515004124206" style="zoom:50%;" /></div>
+
+### 4、Leaky ReLU函数（带泄漏的ReLU）
+
+**特点**：当z小于0时，仍保持一定的斜率，而不是令斜率直接为0。
+
+**函数解析式**：$a=leakyRelu(z)=max\{0.01z,z\}$
+
+<div align="center"><img src="../../TyporaPics/image-20220515004206179.png" alt="image-20220515004206179" style="zoom:50%;" /></div>
+
+## 五、为何需要非线性的激活函数
+
+假设在一个2层神经网络中，使用线性函数作为激活函数，即令$g(z)=z$，则此时有：
+$$
+a^{[1]}=z^{[1]}=w^{[1]}x+b^{[1]}\\
+a^{[2]}=z^{[2]}=w^{[2]}a^{[1]}+b^{[2]}=w^{[2]}(w^{[1]}x+b^{[1]})+b^{[2]}=(w^{[2]}w^{[1]})x+(w^{[2]}b^{[1]}+b^{[2]})
+$$
+可以看出，$a^{[2]}=\hat{y}$ 仍为 $x$ 的线性函数，无论有多少层隐藏层，都跟不加隐藏层没有区别。因此在隐藏层单元使用线性函数是<font color="red">不可取</font>的，必须对其进行**非线性化**处理，即添加激活函数。
+
+> 注：只有**回归问题的输出层**中<font color="red">可能</font>可以直接使用线性函数（如房价预测问题），但仍然非常少见
+
+## 六、激活函数的导数
+
+### 1、sigmoid的导数
+
+$$
+a=\sigma(z)=\frac{1}{1+e^{-z}}\\
+\sigma'(z)=a(1-a)=\frac{1}{1+e^{-z}}(1-\frac{1}{1+e^{-z}})
+$$
+
+### 2、tanh的导数
+
+$$
+a=tanh(z)=\frac{e^z-e^{-z}}{e^z+e^{-z}}\\
+tanh'(z)=1-a^2=1-(\frac{e^z-e^{-z}}{e^z+e^{-z}})^2
+$$
+
+### 3、ReLU的导数
+
+$$
+a=relu(z)=max(0,z)\\
+relu'(z)=
+\begin{cases}
+0&z<0\\
+1&z>0\\
+undefined&z=0
+\end{cases}
+$$
+
+### 4、Leaky ReLU的导数
+
+$$
+a=leakyRelu(z)=max(0.01z,z)\\
+leakyRelu'(z)=
+\begin{cases}
+0&z<0\\
+1&z>0\\
+undefined&z=0
+\end{cases}
+$$
+
+
+
+
+
+
+
+
+
+
+
