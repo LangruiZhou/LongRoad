@@ -10,7 +10,7 @@ theta = 0:179;
 g = radon(I,theta);   % 做0~179度共计180个角度的投影，得到g(p,theta)
 width = length(g); 
 
-G = fft(g,729);   % 一维快速傅里叶变换，得到G(w,theta)。注意：该结果为复数
+G = fft(g, width);   % 一维快速傅里叶变换，得到G(w,theta)。注意：该结果为复数
 
 
 % ==== step2:将G(w,theta)乘以斜坡滤波器|w| ==== %
